@@ -8,6 +8,9 @@ use App\Http\Requests\CategoryRequest;
 use App\Category;
 use App\Post;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DBActionDelete;
+
 class MainController extends Controller
 {
     public function index() {
@@ -57,6 +60,14 @@ class MainController extends Controller
         // });
         $category -> posts() -> delete();
         $category -> delete();
+
+        // Mail::to("prova@mail.com")->send(new DBActionDelete());
+        Mail::to("prova@mail.com")
+            ->send(new DBActionDelete(
+                "Category",
+                $category->name
+            ));
+
         return redirect() -> route('home.index');
     }
 
